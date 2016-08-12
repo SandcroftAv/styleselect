@@ -1,18 +1,18 @@
 // UMD module from From https://github.com/umdjs/umd/blob/master/returnExports.js
 // From 'if the module has no dependencies' example.
 (function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([], factory);
-    } else if (typeof exports === 'object') {
-        // Node. Does not work with strict CommonJS, but
-        // only CommonJS-like environments that support module.exports,
-        // like Node.
-        module.exports = factory();
-    } else {
-        // Browser globals (root is window)
-        root.returnExports = factory();
-  }
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define([], factory);
+	} else if (typeof exports === 'object') {
+		// Node. Does not work with strict CommonJS, but
+		// only CommonJS-like environments that support module.exports,
+		// like Node.
+		module.exports = factory();
+	} else {
+		// Browser globals (root is window)
+		root.returnExports = factory();
+	}
 }(this, function () {
 // End of UMD module
 
@@ -52,10 +52,10 @@
 	// IE10 dataset polyfill
 	// From https://gist.githubusercontent.com/brettz9/4093766/raw/ba31a05e7ce21af67c6cafee9b3f439c86e95b01/html5-dataset.js
 	if (!document.documentElement.dataset &&
-			 // FF is empty while IE gives empty object
-			(!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset')  ||
-			!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset').get)
-		) {
+		// FF is empty while IE gives empty object
+		(!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset')  ||
+		!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset').get)
+	) {
 		var propDescriptor = {
 			enumerable: true,
 			get: function () {
@@ -153,16 +153,15 @@
 	// selector:String - CSS selector for the select box to style
 	return function(selector) {
 
-		// Use native selects (which pop up large native UIs to go through the options ) on iOS/Android
-		if ( navigator.userAgent.match( /iPad|iPhone|Android/i ) ) {
-			return
-		}
+		// Detect iOS/Android
+		var isTouch = navigator.userAgent.match( /iPad|iPhone|Android/i );
 
 		var realSelect = query(selector),
 			realOptions = realSelect.children,
 			selectedIndex = realSelect.selectedIndex,
 			uuid = makeUUID(),
-			styleSelectHTML = '<div class="style-select" aria-hidden="true" data-ss-uuid="' + uuid + '">';
+			className = 'style-select' + (isTouch ? ' touch' : ''),
+			styleSelectHTML = '<div class="' + className + '" aria-hidden="true" data-ss-uuid="' + uuid + '">';
 
 		// The index of the item that's being highlighted by the mouse or keyboard
 		var highlightedOptionIndex;
@@ -180,7 +179,7 @@
 		realOptions.forEach(function(realOption, index){
 			var text = realOption.textContent,
 				value = realOption.getAttribute('value') || '',
-                cssClass = 'ss-option';
+				cssClass = 'ss-option';
 
 			if (index === selectedIndex) {
 				// Mark first item as selected-option - this is where we store state for the styled select box
@@ -188,19 +187,36 @@
 				selectedOptionHTML = '<div class="ss-selected-option" tabindex="0" data-value="' + value + '">' + text + '</div>'
 			}
 
-            if (realOption.disabled) {
-                cssClass += ' disabled';
-            }
+			if (realOption.disabled) {
+				cssClass += ' disabled';
+			}
 
-            // Continue building optionsHTML
+			// Continue building optionsHTML
 			optionsHTML += '<div class="' + cssClass + '" data-value="' + value + '">' + text + '</div>';
 		});
 		optionsHTML += '</div>';
 		styleSelectHTML += selectedOptionHTML += optionsHTML += '</div>';
+
 		// And add out styled select just after the real select
 		realSelect.insertAdjacentHTML('afterend', styleSelectHTML);
 
 		var styledSelect = query('.style-select[data-ss-uuid="'+uuid+'"]');
+
+		// Append the real select to the styled container
+		styledSelect.appendChild(realSelect);
+
+		// Bind onchange event for touch devices only
+		if ( isTouch ) {
+			realSelect.addEventListener('change', function (ev) {
+				var target = ev.target,
+					selectedOption = target.children[target.selectedIndex],
+					newValue = selectedOption.getAttribute('data-value'),
+					newLabel = selectedOption.textContent;
+
+				changeRealSelectBox(newValue, newLabel)
+			});
+		}
+
 		var styleSelectOptions = styledSelect.querySelectorAll('.ss-option');
 		var selectedOption = styledSelect.querySelector('.ss-selected-option');
 
@@ -221,23 +237,25 @@
 				}
 			});
 
-			// Update real select box
-			realSelect.value = newValue;
+			// Update real select box if not touch only
+			if ( ! isTouch ) {
+				realSelect.value = newValue;
 
-			// Send 'change' event to real select - to trigger any change event listeners
-			var changeEvent = new CustomEvent('change');
-			realSelect.dispatchEvent(changeEvent);
+				// Send 'change' event to real select - to trigger any change event listeners
+				var changeEvent = new CustomEvent('change');
+				realSelect.dispatchEvent(changeEvent);
+			}
 		};
 
 		// Change real select box when a styled option is clicked
 		styleSelectOptions.forEach(function(unused, index){
 			var styleSelectOption = styleSelectOptions.item(index);
 
-            if (styleSelectOption.className.match(/\bdisabled\b/)) {
-                return;
-            }
+			if (styleSelectOption.className.match(/\bdisabled\b/)) {
+				return;
+			}
 
-            styleSelectOption.addEventListener('click', function(ev) {
+			styleSelectOption.addEventListener('click', function(ev) {
 				var target = ev.target,
 					styledSelectBox = target.parentNode.parentNode,
 					uuid = styledSelectBox.getAttribute('data-ss-uuid'),
@@ -279,12 +297,14 @@
 		};
 
 		var toggleStyledSelect = function(styledSelectBox){
-			if ( ! styledSelectBox.classList.contains('open') ) {
-				// If we're closed and about to open, close other style selects on the page
-				closeAllStyleSelects(styledSelectBox);
+			if ( ! isTouch ) {
+				if ( ! styledSelectBox.classList.contains('open') ) {
+					// If we're closed and about to open, close other style selects on the page
+					closeAllStyleSelects(styledSelectBox);
+				}
+				// Then toggle open/close
+				styledSelectBox.classList.toggle('open');
 			}
-			// Then toggle open/close
-			styledSelectBox.classList.toggle('open');
 		};
 
 		// When a styled select box is clicked
@@ -340,7 +360,9 @@
 						newValue = highlightedOption.dataset.value,
 						newLabel = highlightedOption.textContent;
 
-					changeRealSelectBox(newValue, newLabel);
+					if ( ! highlightedOption.classList.contains('disabled') ) {
+						changeRealSelectBox(newValue, newLabel);
+					}
 					ev.preventDefault();
 					ev.stopPropagation();
 					break;
