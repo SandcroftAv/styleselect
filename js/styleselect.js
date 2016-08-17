@@ -167,6 +167,11 @@
 				// If we're closed and about to open, close other style selects on the page
 				closeAllStyleSelects(styledSelectBox);
 			}
+
+			// Adjust dropdown position to allow for different heights of the styled select
+			var dropdown = styledSelectBox.querySelector('.ss-dropdown');
+			dropdown.style.top = styledSelectBox.offsetHeight + 'px';
+
 			// Then toggle open/close
 			styledSelectBox.classList.toggle('open');
 		}
