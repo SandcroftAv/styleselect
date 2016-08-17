@@ -9,8 +9,8 @@
         <link rel="stylesheet" href="css/main.css">
         <script src='http://cdn.ractivejs.org/latest/ractive.js'></script>
     </head>
-    <body style="padding: 0 15px;">
-        <img src="images/styleselect.png" alt="Style select" style="width: 100%;"/>
+    <body>
+        <img src="images/styleselect.png" alt="Style select"/>
         <h1>Full styling for select boxes. No jQuery.</h1>
 
         <ul>
@@ -29,10 +29,19 @@
 
         <p>That's all. Here's one we just made: </p>
         <select>
-            <option value="value1">Label 1</option>
-            <option value="value2" selected>Label 2</option>
-            <option value="value3">Label 3</option>
-            <option disabled value="value4">Label 4</option>
+            <option value="value-a1">Label A1</option>
+            <option value="value-a2" selected>Label A2</option>
+            <option value="value-a3">Label A3</option>
+            <option disabled value="value-a4">Label A4</option>
+        </select>
+        <p class="result"></p>
+        <p>Multiple selects can be styled if the CSS-style selector matches more than one element. For example, to style all the selects on a webpage:</p>
+        <code>styleSelect('select');</code>
+        <select>
+            <option value="value-b1" selected>Label B1</option>
+            <option disabled value="value-b2">Label B2</option>
+            <option value="value-b3">Label B3</option>
+            <option value="value-b4">Label B4</option>
         </select>
         <p class="result"></p>
         <p>Simple. From here on you'll probably want to open <strong>styleselect.scss</strong> and tweak styling.</p>

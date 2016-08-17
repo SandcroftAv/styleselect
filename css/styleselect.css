@@ -18,7 +18,7 @@ select[data-ss-uuid] {
 .style-select {
   display: block;
   position: relative; }
-  .style-select, .style-select * {
+  .style-select, .style-select > * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -29,8 +29,9 @@ select[data-ss-uuid] {
     cursor: pointer; }
   .style-select .ss-selected-option {
     width: 100%;
-    padding: 7px 10px;
-    border: 1px solid #c8c8c8; }
+    padding: 8px 10px;
+    border: 1px solid #c8c8c8;
+    background-color: #fff; }
     .style-select .ss-selected-option::after {
       content: "◢";
       position: absolute;
@@ -43,17 +44,20 @@ select[data-ss-uuid] {
   .style-select .ss-dropdown {
     top: 40px;
     left: 0;
+    z-index: 1;
     position: absolute;
     float: left;
     width: 100%;
     display: none;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     border: 1px solid #c8c8c8;
-    border-top: 0 none; }
+    border-top: 0 none;
+    box-sizing: border-box; }
     .style-select .ss-dropdown .ss-option {
       width: 100%;
-      padding: 7px 10px;
-      background-color: white; }
+      padding: 8px 10px;
+      background-color: white;
+      box-sizing: border-box; }
       .style-select .ss-dropdown .ss-option.highlighted {
         background-color: #f2f4f8; }
       .style-select .ss-dropdown .ss-option.disabled {
