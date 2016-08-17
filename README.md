@@ -11,7 +11,7 @@
 
 ## Demo
 
-There's a live demo at http://mikemaccana.github.io/styleselect/.
+There's a live demo at http://javisoler.github.io/styleselect/.
 
 There's also a live demo of the code in this repo. Just run `http-server` (or whatever your preferred static webserver is) in the current directory.
 
