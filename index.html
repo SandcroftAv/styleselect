@@ -29,21 +29,25 @@
         <code>styleSelect('select.some-class');</code>
 
         <p>That's all. Here's one we just made: </p>
-        <select>
-            <option value="value-a1">Label A1</option>
-            <option value="value-a2" selected>Label A2</option>
-            <option value="value-a3">Label A3</option>
-            <option disabled value="value-a4">Label A4</option>
-        </select>
+        <div style="width: 50%">
+            <select>
+                <option value="value-a1">Label A1</option>
+                <option value="value-a2" selected>Label A2</option>
+                <option value="value-a3">Label A3</option>
+                <option disabled value="value-a4">Label A4</option>
+            </select>
+        </div>
         <p class="result"></p>
         <p>Multiple selects can be styled if the CSS-style selector matches more than one element. For example, to style all the selects on a webpage:</p>
         <code>styleSelect('select');</code>
-        <select>
-            <option value="value-b1" selected>Label B1</option>
-            <option disabled value="value-b2">Label B2</option>
-            <option value="value-b3">Label B3</option>
-            <option value="value-b4">Label B4</option>
-        </select>
+        <div style="width: 50%">
+            <select>
+                <option value="value-b1" selected>Label B1</option>
+                <option disabled value="value-b2">Label B2</option>
+                <option value="value-b3">Label B3</option>
+                <option value="value-b4">Label B4</option>
+            </select>
+        </div>
         <p class="result"></p>
         <p>Simple. From here on you'll probably want to open <strong>styleselect.scss</strong> and tweak styling.</p>
 

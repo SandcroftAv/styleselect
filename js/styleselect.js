@@ -324,64 +324,66 @@
 
 			// When a styled select box is clicked
 			var styledSelectedOption = query('.style-select[data-ss-uuid="' + uuid + '"] .ss-selected-option');
+            
+			if (styledSelectedOption) {
+                styledSelectedOption.addEventListener('click', function(ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    toggleStyledSelect(ev.target.parentNode);
+                });
 
-			styledSelectedOption.addEventListener('click', function(ev) {
-				ev.preventDefault();
-				ev.stopPropagation();
-				toggleStyledSelect(ev.target.parentNode);
-			});
+                // Keyboard handling
+                styledSelectedOption.addEventListener('keydown', function(ev) {
+                    switch (ev.keyCode) {
+                        case KEYCODES.SPACE:
+                            // Space shows and hides styles select boxes
+                            toggleStyledSelect(styledSelect);
+                            break;
+                        case KEYCODES.DOWN:
+                        case KEYCODES.UP:
+                            // Move the highlight up and down
+                            if ( ! styledSelect.classList.contains('open') ) {
+                                // If style select is not open, up/down should open it.
+                                toggleStyledSelect(styledSelect);
+                            } else {
+                                // If style select is already open, these should change what the highlighted option is
+                                if ( ev.keyCode === KEYCODES.UP ) {
+                                    // Up arrow moves earlier in list
+                                    if ( highlightedOptionIndex !== 0 ) {
+                                        highlightedOptionIndex = highlightedOptionIndex - 1
+                                    }
+                                } else {
+                                    // Down arrow moves later in list
+                                    if ( highlightedOptionIndex < highlightedOptionIndexMax ) {
+                                        highlightedOptionIndex = highlightedOptionIndex + 1
+                                    }
+                                }
+                                styleSelectOptions.forEach(function(option, index){
+                                    if ( index === highlightedOptionIndex ) {
+                                        option.classList.add('highlighted')
+                                    } else {
+                                        option.classList.remove('highlighted')
+                                    }
+                                })
+                            }
+                            ev.preventDefault();
+                            ev.stopPropagation();
+                            break;
+                        // User has picked an item from the keyboard
+                        case KEYCODES.ENTER:
+                            var highlightedOption = styledSelectedOption.parentNode.querySelectorAll('.ss-option')[highlightedOptionIndex],
+                                newValue = highlightedOption.dataset.value,
+                                newLabel = highlightedOption.textContent;
 
-			// Keyboard handling
-			styledSelectedOption.addEventListener('keydown', function(ev) {
-				switch (ev.keyCode) {
-					case KEYCODES.SPACE:
-						// Space shows and hides styles select boxes
-						toggleStyledSelect(styledSelect);
-						break;
-					case KEYCODES.DOWN:
-					case KEYCODES.UP:
-						// Move the highlight up and down
-						if ( ! styledSelect.classList.contains('open') ) {
-							// If style select is not open, up/down should open it.
-							toggleStyledSelect(styledSelect);
-						} else {
-							// If style select is already open, these should change what the highlighted option is
-							if ( ev.keyCode === KEYCODES.UP ) {
-								// Up arrow moves earlier in list
-								if ( highlightedOptionIndex !== 0 ) {
-									highlightedOptionIndex = highlightedOptionIndex - 1
-								}
-							} else {
-								// Down arrow moves later in list
-								if ( highlightedOptionIndex < highlightedOptionIndexMax ) {
-									highlightedOptionIndex = highlightedOptionIndex + 1
-								}
-							}
-							styleSelectOptions.forEach(function(option, index){
-								if ( index === highlightedOptionIndex ) {
-									option.classList.add('highlighted')
-								} else {
-									option.classList.remove('highlighted')
-								}
-							})
-						}
-						ev.preventDefault();
-						ev.stopPropagation();
-						break;
-					// User has picked an item from the keyboard
-					case KEYCODES.ENTER:
-						var highlightedOption = styledSelectedOption.parentNode.querySelectorAll('.ss-option')[highlightedOptionIndex],
-							newValue = highlightedOption.dataset.value,
-							newLabel = highlightedOption.textContent;
-
-						if ( ! highlightedOption.classList.contains('disabled') ) {
-							changeRealSelectBox(realSelect, styledSelect, newValue, newLabel);
-						}
-						ev.preventDefault();
-						ev.stopPropagation();
-						break;
-				}
-			});
+                            if ( ! highlightedOption.classList.contains('disabled') ) {
+                                changeRealSelectBox(realSelect, styledSelect, newValue, newLabel);
+                            }
+                            ev.preventDefault();
+                            ev.stopPropagation();
+                            break;
+                    }
+                });
+			}
 		});
 
 		// Clicking outside of the styled select box closes any open styled select boxes

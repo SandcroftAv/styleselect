@@ -31,7 +31,8 @@ select[data-ss-uuid] {
     width: 100%;
     padding: 8px 10px;
     border: 1px solid #c8c8c8;
-    background-color: #fff; }
+    background-color: #fff;
+    position: relative; }
     .style-select .ss-selected-option::after {
       content: "◢";
       position: absolute;
@@ -48,6 +49,8 @@ select[data-ss-uuid] {
     position: absolute;
     float: left;
     width: 100%;
+    max-height: 300px;
+    overflow: auto;
     display: none;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     border: 1px solid #c8c8c8;
