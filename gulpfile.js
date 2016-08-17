@@ -25,18 +25,18 @@ gulp.task('sass', function () {
       .pipe( connect.reload() );
 });
 
-// The default task (called when you run `gulp`)
-gulp.task('default', function() {
-  gulp.run('sass');
-
-  // Watch files and run tasks if they change
-  gulp.watch('./scss/**/*.*', function(event) {
-    gulp.run('sass');
-  });
-
-  connect.server({
-    port: 4242,
-    livereload: true
-  });
+// Watch files and run tasks if they change
+gulp.task('watch', function () {
+  gulp.watch('./scss/**/*.*', ['sass']);
 });
+
+gulp.task('serve', function () {
+    connect.server({
+        port: 4242,
+        livereload: true
+    });
+});
+
+// The default task (called when you run `gulp`)
+gulp.task('default', ['sass', 'watch', 'serve']);
 
