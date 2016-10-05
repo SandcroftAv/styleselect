@@ -1,6 +1,7 @@
 $dark-blue: rgb(0, 0, 72);
 
 body {
+    padding: 0 15px;
     margin: 24px auto;
     max-width: 720px;
     font-family: 'Open Sans', Helvetica, arial, sans-serif;
@@ -9,13 +10,18 @@ body {
     font-weight: 300;
     color: #444B58;
     background: #fff;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.05);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
     -webkit-font-smoothing: antialiased;
+}
+
+img {
+    width: 100%;
 }
 
 h1 {
     font-weight: 300;
     text-align: center;
+    line-height: normal;
 }
 
 .download {
@@ -29,4 +35,13 @@ h1 {
     text-decoration: none;
     font-weight: 300;
     font-size: 16pt;
+}
+
+code {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(51,51,51,.1);
+    border-radius: 3px;
+    display: block;
+    background-color: #f9f9fa;
 }
